@@ -1,0 +1,18 @@
+# systemd unit: Väre behind Apache. One worker: the Qloo rate pacer (4 req/s,
+# limit 5) is per process, so more workers could exceed the limit.
+# Copy to /etc/systemd/system/vare.service,
+# adjust User and paths, then: systemctl daemon-reload && systemctl enable --now vare
+[Unit]
+Description=Vare (FastAPI, uvicorn)
+After=network.target
+
+[Service]
+User=www-data
+WorkingDirectory=/opt/vare
+EnvironmentFile=/opt/vare/.env
+ExecStart=/opt/vare/.venv/bin/uvicorn vare.main:app --host 127.0.0.1 --port 8765 --proxy-headers --workers 1
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

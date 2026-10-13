@@ -1,0 +1,14 @@
+.env
+.env.*
+!.env.example
+private/
+var/
+benchmark/results/
+__pycache__/
+*.pyc
+*.db
+.venv/
+.pytest_cache/
+# planning notes, not part of the public repo
+hackathons-board.md
+.claude/

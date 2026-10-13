@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Väre</title>
+<meta name="description" content="Find the tags hiding between the lines. A conventional LLM tag generator and a Qloo-assisted one, side by side, with the evidence.">
+<link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+<main>
+  <header>
+    <h1>[ Väre ]</h1>
+    <p class="tagline">Find the tags hiding between the lines.</p>
+  </header>
+
+  <form id="form" autocomplete="off">
+    <fieldset class="row" id="destinations">
+      <legend>destination:</legend>
+      <label><input type="radio" name="destination" value="general" checked> General</label>
+      <label><input type="radio" name="destination" value="youtube"> YouTube</label>
+      <label><input type="radio" name="destination" value="linkedin"> LinkedIn</label>
+      <label><input type="radio" name="destination" value="instagram"> Instagram</label>
+    </fieldset>
+
+    <label class="sr" for="text">Text</label>
+    <textarea id="text" name="text" rows="10" maxlength="4000"
+      placeholder="Paste a post, a script, a caption. Väre runs a plain LLM tagger and a Qloo-assisted one on the same text."></textarea>
+    <div class="under-text">
+      <span id="chars">0 / 4000</span>
+      <span>
+        examples:
+        <button type="button" class="link" data-example="film">film</button>
+        <button type="button" class="link" data-example="music">music</button>
+        <button type="button" class="link" data-example="tv">TV</button>
+        <button type="button" class="link" data-example="linkedin">no culture</button>
+      </span>
+    </div>
+
+    <div class="row controls">
+      <fieldset class="row" id="modes">
+        <legend class="sr">mode</legend>
+        <label><input type="radio" name="mode" value="tags" checked> Tags</label>
+        <label><input type="radio" name="mode" value="topics"> Topics</label>
+      </fieldset>
+      <button type="submit" id="go">Generate and compare</button>
+    </div>
+
+    <label class="advanced"><input type="checkbox" id="advanced"> Advanced mode: <b id="adv-state">OFF</b></label>
+  </form>
+
+  <div id="progress" class="progress" hidden><div></div></div>
+  <p id="status" class="status" role="status"></p>
+
+  <section id="results" hidden>
+    <hr>
+    <div class="cols">
+      <article class="col" id="col-a">
+        <h2>Conventional LLM</h2>
+        <p class="sub" data-sub="tags">Generated tags</p>
+        <div class="error" hidden></div>
+        <div class="items"></div>
+        <div class="foot"><span class="count"></span> <button type="button" class="copy">Copy</button></div>
+      </article>
+      <article class="col" id="col-b">
+        <h2>Qloo-assisted</h2>
+        <p class="sub" data-sub="tags">Culturally expanded tags</p>
+        <div class="error" hidden></div>
+        <div class="items"></div>
+        <div class="foot"><span class="count"></span> <button type="button" class="copy">Copy</button></div>
+      </article>
+    </div>
+    <div class="stats">
+      <span>Overlap: <b id="overlap">-</b></span>
+      <span>Novelty: <b id="novelty">-</b></span>
+      <span class="right">Total time: <b id="latency">-</b></span>
+    </div>
+    <p class="legend">
+      <span><i class="mk">◆</i> llm: from the language model only</span>
+      <span><i class="mk q">●</i> qloo_direct: in the text, confirmed by Qloo</span>
+      <span><i class="mk q">■</i> qloo_profile: Qloo's own tag for the subject</span>
+      <span><i class="mk q">◆●</i> qloo_inferred: Qloo Insights association</span>
+    </p>
+    <div id="detail" class="detail" hidden></div>
+  </section>
+
+  <section id="trace" hidden>
+    <hr>
+    <h2>Advanced mode trace</h2>
+    <p class="sub">Every prompt, every Qloo call, every decision. Secrets are stripped on the server.</p>
+    <div id="stages"></div>
+  </section>
+
+  <footer>
+    <hr>
+    <p>Väre is a culture-aware tagging service for agents, over MCP at <code id="mcp-url">/mcp</code>
+      (create_tags, suggest_topics, qloo_profile, qloo_related). This page is its test bench:
+      the same Väre run next to a conventional LLM tagger.</p>
+    <p>Väre does not claim the Qloo column is better. It shows both and where each tag came from.
+      No account, nothing stored. Cultural data: <a href="https://www.qloo.com/" rel="noopener">Qloo</a>.</p>
+  </footer>
+</main>
+<script src="static/app.js"></script>
+</body>
+</html>
